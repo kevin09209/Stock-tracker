@@ -1,0 +1,40 @@
+{
+  "account": {
+    "handle": "aleabitoreddit",
+    "display": "Serenity",
+    "description": "AI／半導體供應鏈分析師"
+  },
+  "timezone": "America/New_York",
+  "report": {
+    "language": "zh-Hant",
+    "quarterly_table_min_mentions_90d": 3,
+    "top_cards_limit": 8
+  },
+  "industries": {
+    "SIVE": "AI Photonics/CW Lasers",
+    "LITE": "Optical Comms",
+    "AAOI": "Optical Modules",
+    "NVDA": "AI Chips",
+    "MRVL": "AI Semis/CPO",
+    "AXTI": "InP Substrates",
+    "POET": "Optical Engines",
+    "RKLB": "Space/Launch",
+    "COHR": "Optical Modules",
+    "TSLA": "EV/AI",
+    "AMD": "AI Chips",
+    "GFS": "Foundry",
+    "META": "Hyperscaler",
+    "SOI": "SOI Wafers"
+  },
+  "price_symbols": {
+    "SIVE": "sive.se",
+    "SOI": "soi.fr",
+    "_default_suffix": ".us"
+  },
+  "currencies": {
+    "SIVE": "SEK",
+    "SOI": "EUR",
+    "_default": ""
+  },
+  "ticker_blocklist": ["A", "I", "AI", "ATH", "CEO", "CFO", "EPS", "ETF", "FY", "GAAP", "GDP", "IMO", "IPO", "IR", "M", "PT", "Q", "USD", "SEK", "EUR", "YOY", "DYOR", "HVM", "CPO", "CW", "DFB", "INP"]
+}
