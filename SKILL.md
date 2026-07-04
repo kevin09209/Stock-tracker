@@ -17,7 +17,8 @@ description: 追蹤一位或多位 X 股票分析帳號（預設 Serenity @aleab
 python3 scripts/fetch.py --x-api        # 需要環境變數 TWITTER_BEARER_TOKEN
 python3 scripts/ingest.py               # 擷取 $代碼 提及並粗分類表態
 python3 scripts/prices.py               # 從 Stooq 抓每檔標的的日收盤價
-python3 scripts/report.py               # 產生 reports/{handle}-tracker-{日期}-zh.html
+python3 scripts/report.py               # 產生日報（含博主共識、戰績記分卡）
+python3 scripts/detail.py               # 產生個股詳情頁 reports/tickers/{代碼}-zh.html
 ```
 
 沒有 X API 金鑰時，用 JSON 匯入貼文（格式見 `data/sample_posts.json`）：
@@ -32,7 +33,7 @@ python3 scripts/prices.py --import <價格.json>   # 離線價格，格式見 da
 ## 個股深度分析（使用者問「他怎麼看 XXXX」時）
 
 1. 先跑 `python3 scripts/query.py TICKER` 取得該標的的完整提及紀錄（Markdown：
-   日期、表態、原文）。
+   日期、博主、表態、原文）。
 2. 讀取輸出後，**由你（Claude）撰寫**繁體中文分析，結構如下：
    - 標題：`TICKER — {博主} 觀點分析`，附追蹤期與明確表態次數
    - **叙事弧線**：一段連貫敘事，講博主對這檔股票的論點如何隨時間演進，
@@ -40,6 +41,15 @@ python3 scripts/prices.py --import <價格.json>   # 離線價格，格式見 da
    - **關鍵觀點（N 條）**：挑 3–5 則轉折點貼文，每則格式
      `[日期] — 主題：一句話摘要`
 3. 結尾必附免責聲明：內容彙整自公開貼文，不構成投資建議，請以原帖為準（DYOR）。
+4. 把完成的分析存到 `data/analysis/{TICKER}-zh.md`（範例見 `data/analysis/SIVE-zh.md`），
+   再跑 `python3 scripts/detail.py --tickers TICKER`——分析會自動嵌入該股詳情頁，
+   與走勢圖、逐筆回測、提及時間軸放在同一頁。回覆使用者時附上詳情頁路徑。
+
+## 博主戰績（使用者問「這位博主準嗎」「誰比較準」時）
+
+跑 `python3 scripts/backtest.py`：對每次明確看多／看空表態計算 7/30/90 日後
+報酬（以博主方向計，看空時下跌為正），輸出各博主命中率記分卡＋逐筆明細。
+日報末段也有同一份記分卡。轉述時務必附口徑說明與「過去戰績不代表未來」。
 
 ## 表態分類口徑
 

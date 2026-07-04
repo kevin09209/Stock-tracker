@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from backtest import HORIZONS, compute_calls, scorecard
 from db import ROOT, account_display, close_on_or_before, connect, get_accounts, load_config
 
 STANCE_ZH = {"bull": "多", "bear": "空", "neutral": "中"}
@@ -138,7 +139,42 @@ def currency_prefix(ticker, cfg):
 NET_ZH = {"bull": ("看多", "up"), "bear": ("看空", "down"), "neutral": ("中性", "flat")}
 
 
-def render(cfg, date, tickers, consensus, local_now):
+def scorecard_html(card, display, esc):
+    if not card:
+        return ""
+    rows = []
+    for acct, s in sorted(card.items(), key=lambda kv: -kv[1]["n_calls"]):
+        cells = []
+        for h in HORIZONS:
+            st = s["horizons"].get(h)
+            if st:
+                cls = "up" if st["avg"] > 0 else ("down" if st["avg"] < 0 else "flat")
+                cells.append(
+                    f'<td class="mono">命中 {st["hit"]:.0f}%<br>'
+                    f'<span class="{cls}">均 {st["avg"]:+.1f}%</span> <span class="na">(n={st["n"]})</span></td>'
+                )
+            else:
+                cells.append('<td class="mono na">樣本不足</td>')
+        rows.append(
+            f'<tr><td>{esc(display.get(acct, acct))}</td>'
+            f'<td class="mono">{s["n_calls"]}</td>{"".join(cells)}</tr>'
+        )
+    header = "".join(f"<th>{h}日</th>" for h in HORIZONS)
+    return f"""
+  <section>
+    <h2>博主戰績記分卡</h2>
+    <p class="note">只回測明確看多／看空表態（中性與背景提及不計）；報酬以博主方向計，看空時下跌為正；
+    基準＝表態日（或其前最近交易日）收盤；未到期或缺價樣本不計。過去戰績不代表未來。</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>博主</th><th>明確表態</th>{header}</tr></thead>
+        <tbody>{''.join(rows)}</tbody>
+      </table>
+    </div>
+  </section>"""
+
+
+def render(cfg, date, tickers, consensus, card, local_now):
     accounts = get_accounts(cfg)
     display = account_display(cfg)
     multi = len(accounts) > 1
@@ -230,7 +266,7 @@ def render(cfg, date, tickers, consensus, local_now):
         chg = t["change_since_first"]
         row_html.append(f"""
         <tr>
-          <td class="mono">{esc(tk)}</td>
+          <td class="mono"><a class="tk" href="tickers/{esc(tk)}-zh.html">{esc(tk)}</a></td>
           <td>{esc(industries.get(tk, "（-）"))}</td>
           <td class="mono" data-v="{t['first_date']}">{price_cell(t["first_date"], t["first_close"])}</td>
           <td class="mono" data-v="{t['last_date'] or ''}">{price_cell(t["last_date"], t["last_close"])}</td>
@@ -275,6 +311,8 @@ def render(cfg, date, tickers, consensus, local_now):
   .sub, .meta {{ color:var(--muted); font-size:13px; }}
   .meta {{ margin-top:2px; }}
   .up {{ color:var(--up); }} .down {{ color:var(--down); }} .flat, .na {{ color:var(--muted); }}
+  a.tk {{ color:inherit; text-decoration:none; border-bottom:1px dashed var(--muted); }}
+  a.tk:hover {{ border-bottom-style:solid; }}
   .consensus-row {{ display:flex; flex-wrap:wrap; align-items:baseline; gap:10px; padding:8px 0; border-bottom:1px solid var(--line); }}
   .consensus-row:last-child {{ border-bottom:none; }}
   .consensus-row .ticker {{ font-size:16px; min-width:64px; }}
@@ -341,7 +379,7 @@ def render(cfg, date, tickers, consensus, local_now):
       </table>
     </div>
   </section>
-
+{scorecard_html(card, display, esc)}
   <footer>
     本報告由自動化工具彙整 {esc("、".join(f"{a['display']}（@{a['handle']}）" for a in accounts))} 公開貼文而成，
     與其本人無任何關聯，亦不構成投資建議——僅為方便研究。內容可能有誤，請以原帖為準並自行核實（DYOR）。
@@ -387,13 +425,14 @@ def main():
 
     tickers = gather(con, cfg, date)
     consensus = gather_consensus(con, date)
+    card = scorecard(compute_calls(con))
     local_now = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M %Z")
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
     accounts = get_accounts(cfg)
     slug = accounts[0]["handle"] if len(accounts) == 1 else "multi"
     out = out_dir / f"{slug}-tracker-{date}-zh.html"
-    out.write_text(render(cfg, date, tickers, consensus, local_now), encoding="utf-8")
+    out.write_text(render(cfg, date, tickers, consensus, card, local_now), encoding="utf-8")
     print(out)
 
 

@@ -1,5 +1,5 @@
 __pycache__/
 *.pyc
 data/tracker.db
-reports/*.html
-!reports/demo-*.html
+reports/*
+!reports/demo/
