@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NVDA 觀點追蹤</title>
+<style>
+  :root {
+    --bg:#faf8f4; --card:#ffffff; --ink:#26241f; --muted:#8a8578;
+    --line:#e8e3d8; --accent:#b08d57; --up:#1a7f4b; --down:#c04545;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; line-height:1.7; }
+  .wrap { max-width:820px; margin:0 auto; padding:32px 20px 64px; }
+  .mono { font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; }
+  header h1 { font-size:28px; margin:0; font-family:ui-monospace,Menlo,monospace; }
+  header .ind { color:var(--muted); }
+  .stats { color:var(--muted); font-size:14px; margin:8px 0 0; }
+  .bigchg { font-size:18px; font-weight:700; }
+  section { margin-top:34px; }
+  h2 { font-size:17px; border-left:4px solid var(--accent); padding-left:10px; margin:0 0 10px; }
+  .summary { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px 18px; }
+  .summary svg { width:100%; height:auto; display:block; }
+  .note { color:var(--muted); font-size:13px; margin:8px 0 0; }
+  .chip i { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:4px; }
+  .chip { margin-right:10px; font-size:12px; }
+  .consensus-row { display:flex; flex-wrap:wrap; gap:12px; padding:7px 0; border-bottom:1px solid var(--line); font-size:14px; }
+  .consensus-row:last-child { border-bottom:none; }
+  .chips { color:var(--muted); }
+  .up { color:var(--up); } .down { color:var(--down); } .flat { color:var(--muted); }
+  a.tk { color:inherit; border-bottom:1px dashed var(--muted); text-decoration:none; }
+  .post { border-bottom:1px solid var(--line); padding:12px 0; }
+  .post:last-child { border-bottom:none; }
+  .post-head { font-size:13px; color:var(--muted); }
+  blockquote { margin:6px 0 0; padding:2px 0 2px 14px; border-left:3px solid var(--line); }
+  .analysis h2 { border:none; padding:0; font-size:18px; }
+  .analysis h3 { font-size:15px; color:var(--accent); }
+  .analysis hr { border:none; border-top:1px solid var(--line); }
+  footer { margin-top:44px; color:var(--muted); font-size:12px; border-top:1px solid var(--line); padding-top:14px; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#191813; --card:#211f19; --ink:#e9e5da; --muted:#98917f;
+             --line:#37342b; --up:#4dbd85; --down:#e07070; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>NVDA <span class="ind">AI Chips</span></h1>
+    <p class="stats">首提 2025-07-21（171.38）→ 最近提及 2026-07-02（197.58）
+      <span class="bigchg up">+15.3%</span><br>
+      共 4 次提及：Serenity 4次<br>表態分佈：背景提及 3・看多 1</p>
+  </header>
+
+  <section>
+    <h2>價格走勢與提及點</h2>
+    <div class="summary"><svg viewBox="0 0 760 300" role="img" aria-label="價格走勢與提及標記">
+  <style>.grid{stroke:var(--line);stroke-width:1}.lab{fill:var(--muted);font-size:11px;font-family:ui-monospace,Menlo,monospace}</style>
+  <line x1="64" y1="270.0" x2="744" y2="270.0" class="grid"/><text x="56" y="274.0" class="lab" text-anchor="end">167</text><line x1="64" y1="206.0" x2="744" y2="206.0" class="grid"/><text x="56" y="210.0" class="lab" text-anchor="end">175</text><line x1="64" y1="142.0" x2="744" y2="142.0" class="grid"/><text x="56" y="146.0" class="lab" text-anchor="end">184</text><line x1="64" y1="78.0" x2="744" y2="78.0" class="grid"/><text x="56" y="82.0" class="lab" text-anchor="end">193</text><line x1="64" y1="14.0" x2="744" y2="14.0" class="grid"/><text x="56" y="18.0" class="lab" text-anchor="end">201</text><text x="64.0" y="292" class="lab" text-anchor="start">2025-07-21</text><text x="498.3" y="292" class="lab" text-anchor="middle">2026-02-27</text><text x="744.0" y="292" class="lab" text-anchor="end">2026-07-02</text>
+  <polyline points="64.0,234.2 140.6,206.0 203.5,256.3 264.5,178.6 319.5,131.3 384.3,169.7 439.4,152.0 498.3,92.1 561.2,124.6 620.2,78.8 677.2,53.6 740.1,27.7 742.0,30.7 744.0,40.4" fill="none" stroke="var(--accent)" stroke-width="2"/>
+  <circle cx="64.0" cy="234.2" r="4.5" fill="var(--up)" stroke="var(--card)" stroke-width="1.5"><title>2025-07-21 Serenity 看多</title></circle><circle cx="439.4" cy="152.0" r="4.5" fill="var(--muted)" stroke="var(--card)" stroke-width="1.5"><title>2026-01-28 Serenity 背景提及</title></circle><circle cx="714.5" cy="53.6" r="4.5" fill="var(--muted)" stroke="var(--card)" stroke-width="1.5"><title>2026-06-17 Serenity 背景提及</title></circle><circle cx="744.0" cy="40.4" r="4.5" fill="var(--muted)" stroke="var(--card)" stroke-width="1.5"><title>2026-07-02 Serenity 背景提及</title></circle>
+</svg><div class="note"><span class="chip"><i style="background:var(--up)"></i>看多</span> <span class="chip"><i style="background:var(--down)"></i>看空</span> <span class="chip"><i style="background:var(--accent)"></i>中性</span> <span class="chip"><i style="background:var(--muted)"></i>背景提及</span>　圓點＝提及日（顏色＝表態），滑過可看明細。</div></div>
+  </section>
+
+  <section>
+    <h2>明確表態回測</h2>
+    <p class="note">報酬以博主方向計（看空時下跌為正）；基準＝表態日（或其前最近交易日）收盤；未到期樣本顯示「—」。</p>
+    <div class="summary"><div class="consensus-row"><span class="mono">2025-07-21</span><span>Serenity</span><span class="up">看多</span><span class="chips mono">7日 —・30日 —・90日 -1.7%</span></div></div>
+  </section>
+  <section>
+    <h2>觀點分析</h2>
+    <p class="note">尚未撰寫。請 Claude 執行 `python3 scripts/query.py NVDA` 閱讀全紀錄後，把分析存至 `data/analysis/NVDA-zh.md` 並重跑 detail.py。</p>
+  </section>
+
+  <section>
+    <h2>提及時間軸（4 則）</h2>
+    <div class="summary">
+      <div class="post">
+        <div class="post-head mono">2025-07-21 ・ Serenity ・
+          <span class="up">看多</span></div>
+        <blockquote>$NVDA GB300 ramp on track per my supply chain checks. Rubin pull-in is real. Still the safest way to play AI capex, long.</blockquote>
+      </div>
+      <div class="post">
+        <div class="post-head mono">2026-01-28 ・ Serenity ・
+          <span class="flat">背景提及</span></div>
+        <blockquote>$NVDA Blackwell Ultra allocations tightening. $MRVL and $AVGO custom ASIC pipelines both full through 2027.</blockquote>
+      </div>
+      <div class="post">
+        <div class="post-head mono">2026-06-17 ・ Serenity ・
+          <span class="flat">背景提及</span></div>
+        <blockquote>$NVDA GTC Taiwan: Rubin CPX volume shipping. Optics content per GPU up 40% gen-on-gen. Good for $LITE $AAOI $SIVE.</blockquote>
+      </div>
+      <div class="post">
+        <div class="post-head mono">2026-07-02 ・ Serenity ・
+          <span class="flat">背景提及</span></div>
+        <blockquote>$RKLB Neutron wet dress rehearsal this week. Background note: $NVDA supply chain unaffected by the photonics drawdown.</blockquote>
+      </div></div>
+  </section>
+
+  <footer>
+    本頁由自動化工具彙整公開貼文而成，不構成投資建議；內容可能有誤，請以原帖為準並自行核實（DYOR）。
+  </footer>
+</div>
+</body>
+</html>

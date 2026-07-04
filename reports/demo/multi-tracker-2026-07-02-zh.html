@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>多博主追蹤日報 2026-07-02</title>
+<style>
+  :root {
+    --bg:#faf8f4; --card:#ffffff; --ink:#26241f; --muted:#8a8578;
+    --line:#e8e3d8; --accent:#b08d57; --up:#1a7f4b; --down:#c04545;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; line-height:1.6; }
+  .wrap { max-width:880px; margin:0 auto; padding:32px 20px 64px; }
+  .mono, .price, .bignum b { font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; }
+  header h1 { font-size:26px; margin:0 0 4px; }
+  .datebadge { display:inline-block; background:#3f4a3f; color:#e8f0e4; padding:2px 12px;
+                border-radius:4px; font-family:ui-monospace,Menlo,monospace; font-size:15px; }
+  .stats { color:var(--muted); margin:10px 0 0; font-size:14px; }
+  section { margin-top:36px; }
+  h2 { font-size:17px; border-left:4px solid var(--accent); padding-left:10px; margin:0 0 6px; }
+  .note { color:var(--muted); font-size:13px; margin:0 0 14px; }
+  .summary { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px 18px; }
+  .gaugebar { height:10px; border-radius:6px; overflow:hidden; display:flex; margin:8px 0 10px; }
+  .gaugebar i { display:block; height:100%; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; }
+  .card-head { display:flex; align-items:baseline; gap:8px; }
+  .ticker { font-size:20px; font-weight:700; font-family:ui-monospace,Menlo,monospace; }
+  .cur { font-size:11px; color:var(--muted); border:1px solid var(--line); border-radius:3px; padding:0 4px; }
+  .daychg { margin-left:auto; font-size:13px; }
+  .bignum { margin-top:8px; font-size:14px; }
+  .bignum b { font-size:26px; }
+  .sub, .meta { color:var(--muted); font-size:13px; }
+  .meta { margin-top:2px; }
+  .up { color:var(--up); } .down { color:var(--down); } .flat, .na { color:var(--muted); }
+  a.tk { color:inherit; text-decoration:none; border-bottom:1px dashed var(--muted); }
+  a.tk:hover { border-bottom-style:solid; }
+  .consensus-row { display:flex; flex-wrap:wrap; align-items:baseline; gap:10px; padding:8px 0; border-bottom:1px solid var(--line); }
+  .consensus-row:last-child { border-bottom:none; }
+  .consensus-row .ticker { font-size:16px; min-width:64px; }
+  .verdict { font-weight:700; }
+  .chips { color:var(--muted); font-size:13px; }
+  .tablewrap { overflow-x:auto; background:var(--card); border:1px solid var(--line); border-radius:10px; }
+  table { border-collapse:collapse; width:100%; font-size:14px; min-width:640px; }
+  th, td { text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { cursor:pointer; user-select:none; white-space:nowrap; color:var(--muted); font-weight:600; }
+  th .arrow { font-size:10px; }
+  tr:last-child td { border-bottom:none; }
+  footer { margin-top:48px; color:var(--muted); font-size:12px; border-top:1px solid var(--line); padding-top:16px; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#191813; --card:#211f19; --ink:#e9e5da; --muted:#98917f;
+             --line:#37342b; --up:#4dbd85; --down:#e07070; }
+    .datebadge { background:#2d382d; color:#cfe3c8; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>多博主追蹤日報 <span class="datebadge">2026-07-02 ET</span></h1>
+    <p class="stats">追蹤：Serenity（@aleabitoreddit）、OrdinaryDad（@ordinarydadai）<br>
+    今日 10 檔標的 ・ 15 次提及<br>
+    數據更新：美東 2026-07-02 ・ 本地時間：2026-07-04 09:03 UTC</p>
+  </header>
+
+  <section>
+    <h2>博主共識（近7日，≥2 位博主提及）</h2>
+    <p class="note">各博主以近7日提及的淨表態計；「一致看多／看空」僅代表觀點重疊，不代表正確。</p>
+    <div class="summary"><div class="consensus-row"><span class="ticker">AAOI</span><span class="verdict up">一致看多</span><span class="chips">Serenity <span class="up">看多</span>（2次）・OrdinaryDad <span class="up">看多</span>（1次）</span></div><div class="consensus-row"><span class="ticker">LITE</span><span class="verdict flat">皆中性</span><span class="chips">Serenity <span class="flat">中性</span>（1次）・OrdinaryDad <span class="flat">中性</span>（1次）</span></div><div class="consensus-row"><span class="ticker">META</span><span class="verdict up">偏多</span><span class="chips">Serenity <span class="flat">中性</span>（1次）・OrdinaryDad <span class="up">看多</span>（1次）</span></div><div class="consensus-row"><span class="ticker">MRVL</span><span class="verdict up">偏多</span><span class="chips">Serenity <span class="flat">中性</span>（2次）・OrdinaryDad <span class="up">看多</span>（2次）</span></div><div class="consensus-row"><span class="ticker">SIVE</span><span class="verdict up">一致看多</span><span class="chips">Serenity <span class="up">看多</span>（4次）・OrdinaryDad <span class="up">看多</span>（2次）</span></div><div class="consensus-row"><span class="ticker">TSLA</span><span class="verdict flat">皆中性</span><span class="chips">Serenity <span class="flat">中性</span>（1次）・OrdinaryDad <span class="flat">中性</span>（1次）</span></div></div>
+  </section>
+
+  <section>
+    <h2>市場標籤（看多／看空／中性）</h2>
+    <div class="summary">
+      <div>按標的數：淨看多 <b class="up">67%</b> ・ 淨看空 <b class="down">0%</b>（追蹤 12 檔）</div>
+      <div class="gaugebar">
+        <i style="width:67%;background:var(--up)"></i>
+        <i style="width:33%;background:var(--line)"></i>
+        <i style="width:0%;background:var(--down)"></i>
+      </div>
+      <div class="note">統計口徑：博主在推文中表達的看多／看空／中性表態，按標的數彙總；未含權重，僅提及不計方向。</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>今天重點討論的標的（按當天提及量）</h2>
+    <p class="note">7日／28日＝滾動窗口累計提及次數；表態為當日推文口徑。</p>
+    <div class="cards">
+      <div class="card">
+        <div class="card-head">
+          <span class="ticker">SIVE</span>
+          <span class="cur">SEK</span>
+          <span class="daychg">較上一交易日 <span class="down">-2.2%</span></span>
+        </div>
+        <div class="bignum">當天提及 <b>3</b> 次 <span class="sub">・7日內 6 ・28日內 8</span></div>
+        <div class="meta">今日表態：2多</div>
+        <div class="meta">提及博主：Serenity</div>
+        <div class="meta">首提 2025-12-23</div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="ticker">AAOI</span>
+          
+          <span class="daychg">較上一交易日 <span class="down">-1.6%</span></span>
+        </div>
+        <div class="bignum">當天提及 <b>2</b> 次 <span class="sub">・7日內 3 ・28日內 4</span></div>
+        <div class="meta">今日表態：1多</div>
+        <div class="meta">提及博主：Serenity、OrdinaryDad</div>
+        <div class="meta">首提 2025-12-11</div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="ticker">META</span>
+          
+          <span class="daychg">較上一交易日 <span class="down">-1.9%</span></span>
+        </div>
+        <div class="bignum">當天提及 <b>2</b> 次 <span class="sub">・7日內 2 ・28日內 2</span></div>
+        <div class="meta">今日表態：1多 1中</div>
+        <div class="meta">提及博主：Serenity、OrdinaryDad</div>
+        <div class="meta">首提 2026-07-02</div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="ticker">MRVL</span>
+          
+          <span class="daychg">較上一交易日 <span class="down">-8.7%</span></span>
+        </div>
+        <div class="bignum">當天提及 <b>2</b> 次 <span class="sub">・7日內 4 ・28日內 4</span></div>
+        <div class="meta">今日表態：1多</div>
+        <div class="meta">提及博主：Serenity、OrdinaryDad</div>
+        <div class="meta">首提 2025-08-25</div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="ticker">AXTI</span>
+          
+          <span class="daychg">較上一交易日 <span class="down">-2.8%</span></span>
+        </div>
+        <div class="bignum">當天提及 <b>1</b> 次 <span class="sub">・7日內 1 ・28日內 1</span></div>
+        <div class="meta">今日表態：1中</div>
+        <div class="meta">提及博主：Serenity</div>
+        <div class="meta">首提 2026-02-10</div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="ticker">LITE</span>
+          
+          <span class="daychg">較上一交易日 <span class="down">-2.7%</span></span>
+        </div>
+        <div class="bignum">當天提及 <b>1</b> 次 <span class="sub">・7日內 2 ・28日內 3</span></div>
+        <div class="meta">今日表態：無（僅背景提及）</div>
+        <div class="meta">提及博主：Serenity</div>
+        <div class="meta">首提 2025-10-25</div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="ticker">NVDA</span>
+          
+          <span class="daychg">較上一交易日 <span class="down">-0.7%</span></span>
+        </div>
+        <div class="bignum">當天提及 <b>1</b> 次 <span class="sub">・7日內 1 ・28日內 2</span></div>
+        <div class="meta">今日表態：無（僅背景提及）</div>
+        <div class="meta">提及博主：Serenity</div>
+        <div class="meta">首提 2025-07-21</div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="ticker">POET</span>
+          
+          <span class="daychg">較上一交易日 <span class="down">-5.6%</span></span>
+        </div>
+        <div class="bignum">當天提及 <b>1</b> 次 <span class="sub">・7日內 1 ・28日內 2</span></div>
+        <div class="meta">今日表態：1中</div>
+        <div class="meta">提及博主：Serenity</div>
+        <div class="meta">首提 2025-12-11</div>
+      </div></div>
+  </section>
+
+  <section>
+    <h2>季度全標的表</h2>
+    <p class="note">點欄位標題可排序；收錄近90日 ≥3 次提及者；行業（-）＝未分類；
+    漲幅＝首次提及日收盤 → 最近提及日收盤。</p>
+    <div class="tablewrap">
+      <table id="qt">
+        <thead><tr>
+          <th data-k="0">代碼 <span class="arrow"></span></th>
+          <th data-k="1">行業 <span class="arrow"></span></th>
+          <th data-k="2">首次提及 <span class="arrow"></span></th>
+          <th data-k="3">最近提及 <span class="arrow"></span></th>
+          <th data-k="4">漲幅 <span class="arrow"></span></th>
+          <th data-k="5">提及次數 <span class="arrow">▼</span></th>
+        </tr></thead>
+        <tbody>
+        <tr>
+          <td class="mono"><a class="tk" href="tickers/SIVE-zh.html">SIVE</a></td>
+          <td>AI Photonics/CW Lasers</td>
+          <td class="mono" data-v="2025-12-23">2025-12-23<br><span class="price">SEK 4.18</span></td>
+          <td class="mono" data-v="2026-07-02">2026-07-02<br><span class="price">SEK 49.00</span></td>
+          <td class="mono" data-v="1072.2488038277513"><span class="up">+1072.2%</span></td>
+          <td class="mono" data-v="14">14</td>
+        </tr>
+        <tr>
+          <td class="mono"><a class="tk" href="tickers/AAOI-zh.html">AAOI</a></td>
+          <td>Optical Modules</td>
+          <td class="mono" data-v="2025-12-11">2025-12-11<br><span class="price">36.32</span></td>
+          <td class="mono" data-v="2026-07-02">2026-07-02<br><span class="price">139.00</span></td>
+          <td class="mono" data-v="282.70925110132157"><span class="up">+282.7%</span></td>
+          <td class="mono" data-v="7">7</td>
+        </tr>
+        <tr>
+          <td class="mono"><a class="tk" href="tickers/LITE-zh.html">LITE</a></td>
+          <td>Optical Comms</td>
+          <td class="mono" data-v="2025-10-25">2025-10-25<br><span class="price">193.80</span></td>
+          <td class="mono" data-v="2026-07-02">2026-07-02<br><span class="price">801.16</span></td>
+          <td class="mono" data-v="313.3952528379773"><span class="up">+313.4%</span></td>
+          <td class="mono" data-v="7">7</td>
+        </tr>
+        <tr>
+          <td class="mono"><a class="tk" href="tickers/MRVL-zh.html">MRVL</a></td>
+          <td>AI Semis/CPO</td>
+          <td class="mono" data-v="2025-08-25">2025-08-25<br><span class="price">72.95</span></td>
+          <td class="mono" data-v="2026-07-02">2026-07-02<br><span class="price">272.05</span></td>
+          <td class="mono" data-v="272.9266620973269"><span class="up">+272.9%</span></td>
+          <td class="mono" data-v="7">7</td>
+        </tr>
+        <tr>
+          <td class="mono"><a class="tk" href="tickers/TSLA-zh.html">TSLA</a></td>
+          <td>EV/AI</td>
+          <td class="mono" data-v="2025-06-25">2025-06-25<br><span class="price">327.55</span></td>
+          <td class="mono" data-v="2026-07-02">2026-07-02<br><span class="price">375.34</span></td>
+          <td class="mono" data-v="14.590138910090044"><span class="up">+14.6%</span></td>
+          <td class="mono" data-v="5">5</td>
+        </tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>博主戰績記分卡</h2>
+    <p class="note">只回測明確看多／看空表態（中性與背景提及不計）；報酬以博主方向計，看空時下跌為正；
+    基準＝表態日（或其前最近交易日）收盤；未到期或缺價樣本不計。過去戰績不代表未來。</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>博主</th><th>明確表態</th><th>7日</th><th>30日</th><th>90日</th></tr></thead>
+        <tbody><tr><td>Serenity</td><td class="mono">13</td><td class="mono na">樣本不足</td><td class="mono">命中 86%<br><span class="up">均 +14.7%</span> <span class="na">(n=7)</span></td><td class="mono">命中 89%<br><span class="up">均 +66.6%</span> <span class="na">(n=9)</span></td></tr><tr><td>OrdinaryDad</td><td class="mono">5</td><td class="mono na">樣本不足</td><td class="mono na">樣本不足</td><td class="mono na">樣本不足</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+  <footer>
+    本報告由自動化工具彙整 Serenity（@aleabitoreddit）、OrdinaryDad（@ordinarydadai） 公開貼文而成，
+    與其本人無任何關聯，亦不構成投資建議——僅為方便研究。內容可能有誤，請以原帖為準並自行核實（DYOR）。
+  </footer>
+</div>
+<script>
+(function () {
+  var tbl = document.getElementById('qt'), dir = {};
+  tbl.querySelectorAll('th').forEach(function (th) {
+    th.addEventListener('click', function () {
+      var k = +th.dataset.k, rows = [].slice.call(tbl.tBodies[0].rows);
+      dir[k] = -(dir[k] || (k >= 4 ? 1 : -1));
+      rows.sort(function (a, b) {
+        var av = a.cells[k].dataset.v ?? a.cells[k].textContent.trim();
+        var bv = b.cells[k].dataset.v ?? b.cells[k].textContent.trim();
+        var an = parseFloat(av), bn = parseFloat(bv);
+        var c = (!isNaN(an) && !isNaN(bn)) ? an - bn : String(av).localeCompare(String(bv));
+        return dir[k] * c;
+      });
+      rows.forEach(function (r) { tbl.tBodies[0].appendChild(r); });
+      tbl.querySelectorAll('.arrow').forEach(function (s) { s.textContent = ''; });
+      th.querySelector('.arrow').textContent = dir[k] > 0 ? '▲' : '▼';
+    });
+  });
+})();
+</script>
+</body>
+</html>

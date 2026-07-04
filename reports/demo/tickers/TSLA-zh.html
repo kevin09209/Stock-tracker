@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TSLA 觀點追蹤</title>
+<style>
+  :root {
+    --bg:#faf8f4; --card:#ffffff; --ink:#26241f; --muted:#8a8578;
+    --line:#e8e3d8; --accent:#b08d57; --up:#1a7f4b; --down:#c04545;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif; line-height:1.7; }
+  .wrap { max-width:820px; margin:0 auto; padding:32px 20px 64px; }
+  .mono { font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; }
+  header h1 { font-size:28px; margin:0; font-family:ui-monospace,Menlo,monospace; }
+  header .ind { color:var(--muted); }
+  .stats { color:var(--muted); font-size:14px; margin:8px 0 0; }
+  .bigchg { font-size:18px; font-weight:700; }
+  section { margin-top:34px; }
+  h2 { font-size:17px; border-left:4px solid var(--accent); padding-left:10px; margin:0 0 10px; }
+  .summary { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px 18px; }
+  .summary svg { width:100%; height:auto; display:block; }
+  .note { color:var(--muted); font-size:13px; margin:8px 0 0; }
+  .chip i { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:4px; }
+  .chip { margin-right:10px; font-size:12px; }
+  .consensus-row { display:flex; flex-wrap:wrap; gap:12px; padding:7px 0; border-bottom:1px solid var(--line); font-size:14px; }
+  .consensus-row:last-child { border-bottom:none; }
+  .chips { color:var(--muted); }
+  .up { color:var(--up); } .down { color:var(--down); } .flat { color:var(--muted); }
+  a.tk { color:inherit; border-bottom:1px dashed var(--muted); text-decoration:none; }
+  .post { border-bottom:1px solid var(--line); padding:12px 0; }
+  .post:last-child { border-bottom:none; }
+  .post-head { font-size:13px; color:var(--muted); }
+  blockquote { margin:6px 0 0; padding:2px 0 2px 14px; border-left:3px solid var(--line); }
+  .analysis h2 { border:none; padding:0; font-size:18px; }
+  .analysis h3 { font-size:15px; color:var(--accent); }
+  .analysis hr { border:none; border-top:1px solid var(--line); }
+  footer { margin-top:44px; color:var(--muted); font-size:12px; border-top:1px solid var(--line); padding-top:14px; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#191813; --card:#211f19; --ink:#e9e5da; --muted:#98917f;
+             --line:#37342b; --up:#4dbd85; --down:#e07070; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>TSLA <span class="ind">EV/AI</span></h1>
+    <p class="stats">首提 2025-06-25（327.55）→ 最近提及 2026-07-02（375.34）
+      <span class="bigchg up">+14.6%</span><br>
+      共 5 次提及：Serenity 4次・OrdinaryDad 1次<br>表態分佈：背景提及 2・中性 3</p>
+  </header>
+
+  <section>
+    <h2>價格走勢與提及點</h2>
+    <div class="summary"><svg viewBox="0 0 760 300" role="img" aria-label="價格走勢與提及標記">
+  <style>.grid{stroke:var(--line);stroke-width:1}.lab{fill:var(--muted);font-size:11px;font-family:ui-monospace,Menlo,monospace}</style>
+  <line x1="64" y1="270.0" x2="744" y2="270.0" class="grid"/><text x="56" y="274.0" class="lab" text-anchor="end">292</text><line x1="64" y1="206.0" x2="744" y2="206.0" class="grid"/><text x="56" y="210.0" class="lab" text-anchor="end">314</text><line x1="64" y1="142.0" x2="744" y2="142.0" class="grid"/><text x="56" y="146.0" class="lab" text-anchor="end">336</text><line x1="64" y1="78.0" x2="744" y2="78.0" class="grid"/><text x="56" y="82.0" class="lab" text-anchor="end">358</text><line x1="64" y1="14.0" x2="744" y2="14.0" class="grid"/><text x="56" y="18.0" class="lab" text-anchor="end">380</text><text x="64.0" y="292" class="lab" text-anchor="start">2025-06-25</text><text x="464.3" y="292" class="lab" text-anchor="middle">2026-01-30</text><text x="744.0" y="292" class="lab" text-anchor="end">2026-07-02</text>
+  <polyline points="64.0,166.1 129.8,216.3 182.8,154.9 241.3,113.8 298.0,185.6 349.2,129.5 409.5,84.6 464.3,143.4 526.5,256.3 574.0,229.1 628.8,157.3 681.8,98.5 740.3,48.4 742.2,39.7 744.0,27.7" fill="none" stroke="var(--accent)" stroke-width="2"/>
+  <circle cx="64.0" cy="166.1" r="4.5" fill="var(--accent)" stroke="var(--card)" stroke-width="1.5"><title>2025-06-25 Serenity 中性</title></circle><circle cx="526.5" cy="256.3" r="4.5" fill="var(--accent)" stroke="var(--card)" stroke-width="1.5"><title>2026-03-05 Serenity 中性</title></circle><circle cx="731.2" cy="98.5" r="4.5" fill="var(--muted)" stroke="var(--card)" stroke-width="1.5"><title>2026-06-25 Serenity 背景提及</title></circle><circle cx="742.2" cy="39.7" r="4.5" fill="var(--accent)" stroke="var(--card)" stroke-width="1.5"><title>2026-07-01 OrdinaryDad 中性</title></circle><circle cx="744.0" cy="27.7" r="4.5" fill="var(--muted)" stroke="var(--card)" stroke-width="1.5"><title>2026-07-02 Serenity 背景提及</title></circle>
+</svg><div class="note"><span class="chip"><i style="background:var(--up)"></i>看多</span> <span class="chip"><i style="background:var(--down)"></i>看空</span> <span class="chip"><i style="background:var(--accent)"></i>中性</span> <span class="chip"><i style="background:var(--muted)"></i>背景提及</span>　圓點＝提及日（顏色＝表態），滑過可看明細。</div></div>
+  </section>
+
+  <section>
+    <h2>觀點分析</h2>
+    <p class="note">尚未撰寫。請 Claude 執行 `python3 scripts/query.py TSLA` 閱讀全紀錄後，把分析存至 `data/analysis/TSLA-zh.md` 並重跑 detail.py。</p>
+  </section>
+
+  <section>
+    <h2>提及時間軸（5 則）</h2>
+    <div class="summary">
+      <div class="post">
+        <div class="post-head mono">2025-06-25 ・ Serenity ・
+          <span class="flat">中性</span></div>
+        <blockquote>Watching $TSLA FSD compute buildout. Dojo roadmap unclear, staying neutral for now, I think the optionality is underappreciated though.</blockquote>
+      </div>
+      <div class="post">
+        <div class="post-head mono">2026-03-05 ・ Serenity ・
+          <span class="flat">中性</span></div>
+        <blockquote>$TSLA energy storage margins carrying the quarter again. Auto business still needs a catalyst.</blockquote>
+      </div>
+      <div class="post">
+        <div class="post-head mono">2026-06-25 ・ Serenity ・
+          <span class="flat">背景提及</span></div>
+        <blockquote>$TSLA robotaxi expansion to 3 new metros. Still neutral on the stock, watching utilization data.</blockquote>
+      </div>
+      <div class="post">
+        <div class="post-head mono">2026-07-01 ・ OrdinaryDad ・
+          <span class="flat">中性</span></div>
+        <blockquote>$TSLA robotaxi utilization numbers leaked and they&#x27;re better than expected. I think the market is asleep on this.</blockquote>
+      </div>
+      <div class="post">
+        <div class="post-head mono">2026-07-02 ・ Serenity ・
+          <span class="flat">背景提及</span></div>
+        <blockquote>$TSLA holding up while everything AI-adjacent bleeds — interesting rotation tell.</blockquote>
+      </div></div>
+  </section>
+
+  <footer>
+    本頁由自動化工具彙整公開貼文而成，不構成投資建議；內容可能有誤，請以原帖為準並自行核實（DYOR）。
+  </footer>
+</div>
+</body>
+</html>
