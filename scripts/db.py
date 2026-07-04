@@ -18,6 +18,18 @@ def load_config():
     return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
 
 
+def get_accounts(cfg):
+    """Tracked accounts as a list; accepts legacy single-`account` configs."""
+    if "accounts" in cfg:
+        return cfg["accounts"]
+    return [cfg["account"]]
+
+
+def account_display(cfg):
+    """-> {handle: display name}"""
+    return {a["handle"]: a.get("display", a["handle"]) for a in get_accounts(cfg)}
+
+
 def connect(db_path=None):
     path = Path(db_path) if db_path else DB_PATH
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -26,11 +38,12 @@ def connect(db_path=None):
     con.executescript(
         """
         CREATE TABLE IF NOT EXISTS posts (
-            id   TEXT PRIMARY KEY,
-            date TEXT NOT NULL,
-            ts   TEXT NOT NULL,
-            text TEXT NOT NULL,
-            url  TEXT DEFAULT ''
+            id      TEXT PRIMARY KEY,
+            date    TEXT NOT NULL,
+            ts      TEXT NOT NULL,
+            text    TEXT NOT NULL,
+            url     TEXT DEFAULT '',
+            account TEXT NOT NULL DEFAULT ''
         );
         CREATE TABLE IF NOT EXISTS mentions (
             post_id TEXT NOT NULL REFERENCES posts(id),
@@ -48,6 +61,12 @@ def connect(db_path=None):
         CREATE INDEX IF NOT EXISTS idx_posts_date ON posts(date);
         """
     )
+    cols = {r["name"] for r in con.execute("PRAGMA table_info(posts)")}
+    if "account" not in cols:  # migrate pre-multi-account databases
+        con.execute("ALTER TABLE posts ADD COLUMN account TEXT NOT NULL DEFAULT ''")
+    primary = get_accounts(load_config())[0]["handle"]
+    con.execute("UPDATE posts SET account=? WHERE account=''", (primary,))
+    con.commit()
     return con
 
 

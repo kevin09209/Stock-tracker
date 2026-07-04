@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from db import ROOT, close_on_or_before, connect, load_config
+from db import ROOT, account_display, close_on_or_before, connect, get_accounts, load_config
 
 STANCE_ZH = {"bull": "多", "bear": "空", "neutral": "中"}
 
@@ -66,6 +66,17 @@ def gather(con, cfg, date):
         ).fetchall()
         t["today_stance"] = {s["stance"]: s["c"] for s in stances}
 
+        t["today_accounts"] = [
+            r2["account"]
+            for r2 in con.execute(
+                """
+                SELECT DISTINCT p.account FROM mentions m JOIN posts p ON p.id = m.post_id
+                WHERE m.ticker = ? AND p.date = ? ORDER BY p.account
+                """,
+                (ticker, date),
+            ).fetchall()
+        ]
+
         # overall stance across the whole tracked window (for the market summary)
         overall = con.execute(
             """
@@ -89,6 +100,27 @@ def gather(con, cfg, date):
     return tickers
 
 
+def gather_consensus(con, date):
+    """Per-(ticker, account) net stance over the trailing 7 days, for tickers
+    that at least two tracked accounts discussed in that window."""
+    d7 = day_offset(date, -6)
+    rows = con.execute(
+        """
+        SELECT m.ticker, p.account,
+               SUM(m.stance='bull') b, SUM(m.stance='bear') s, COUNT(*) n
+        FROM mentions m JOIN posts p ON p.id = m.post_id
+        WHERE p.date BETWEEN ? AND ?
+        GROUP BY m.ticker, p.account
+        """,
+        (d7, date),
+    ).fetchall()
+    by_ticker = {}
+    for r in rows:
+        net = "bull" if r["b"] > r["s"] else ("bear" if r["s"] > r["b"] else "neutral")
+        by_ticker.setdefault(r["ticker"], []).append((r["account"], net, r["n"]))
+    return {t: v for t, v in by_ticker.items() if len(v) >= 2}
+
+
 def stance_line(today_stance):
     parts = [f'{today_stance.get(k, 0)}{STANCE_ZH[k]}' for k in ("bull", "bear", "neutral") if today_stance.get(k)]
     if parts:
@@ -103,8 +135,14 @@ def currency_prefix(ticker, cfg):
     return (cur + " ") if cur else ""
 
 
-def render(cfg, date, tickers, local_now):
-    acct = cfg["account"]
+NET_ZH = {"bull": ("看多", "up"), "bear": ("看空", "down"), "neutral": ("中性", "flat")}
+
+
+def render(cfg, date, tickers, consensus, local_now):
+    accounts = get_accounts(cfg)
+    display = account_display(cfg)
+    multi = len(accounts) > 1
+    title = "多博主追蹤日報" if multi else f"{accounts[0]['display']} 追蹤日報"
     esc = html.escape
     today_tickers = [t for t in tickers if t["today"] > 0]
     today_tickers.sort(key=lambda t: -t["today"])
@@ -129,6 +167,10 @@ def render(cfg, date, tickers, local_now):
     for t in cards:
         tk = t["ticker"]
         cur = currency_prefix(tk, cfg)
+        who = ""
+        if multi:
+            names = "、".join(display.get(a, a) for a in t["today_accounts"])
+            who = f'<div class="meta">提及博主：{esc(names)}</div>'
         card_html.append(f"""
       <div class="card">
         <div class="card-head">
@@ -138,8 +180,42 @@ def render(cfg, date, tickers, local_now):
         </div>
         <div class="bignum">當天提及 <b>{t["today"]}</b> 次 <span class="sub">・7日內 {t["last7"]} ・28日內 {t["last28"]}</span></div>
         <div class="meta">今日表態：{esc(stance_line(t["today_stance"]))}</div>
+        {who}
         <div class="meta">首提 {esc(t["first_date"])}</div>
       </div>""")
+
+    consensus_html = ""
+    if multi and consensus:
+        items = []
+        for tk in sorted(consensus, key=lambda k: -len(consensus[k])):
+            entries = consensus[tk]
+            nets = {net for _, net, _ in entries}
+            if nets == {"bull"}:
+                verdict, vcls = "一致看多", "up"
+            elif nets == {"bear"}:
+                verdict, vcls = "一致看空", "down"
+            elif "bull" in nets and "bear" in nets:
+                verdict, vcls = "多空分歧", "flat"
+            elif "bull" in nets:
+                verdict, vcls = "偏多", "up"
+            elif "bear" in nets:
+                verdict, vcls = "偏空", "down"
+            else:
+                verdict, vcls = "皆中性", "flat"
+            chips = "・".join(
+                f'{esc(display.get(a, a))} <span class="{NET_ZH[net][1]}">{NET_ZH[net][0]}</span>（{n}次）'
+                for a, net, n in entries
+            )
+            items.append(
+                f'<div class="consensus-row"><span class="ticker">{esc(tk)}</span>'
+                f'<span class="verdict {vcls}">{verdict}</span><span class="chips">{chips}</span></div>'
+            )
+        consensus_html = f"""
+  <section>
+    <h2>博主共識（近7日，≥2 位博主提及）</h2>
+    <p class="note">各博主以近7日提及的淨表態計；「一致看多／看空」僅代表觀點重疊，不代表正確。</p>
+    <div class="summary">{''.join(items)}</div>
+  </section>"""
 
     row_html = []
     for t in table_rows:
@@ -167,7 +243,7 @@ def render(cfg, date, tickers, local_now):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{esc(acct['display'])} 追蹤日報 {esc(date)}</title>
+<title>{esc(title)} {esc(date)}</title>
 <style>
   :root {{
     --bg:#faf8f4; --card:#ffffff; --ink:#26241f; --muted:#8a8578;
@@ -199,6 +275,11 @@ def render(cfg, date, tickers, local_now):
   .sub, .meta {{ color:var(--muted); font-size:13px; }}
   .meta {{ margin-top:2px; }}
   .up {{ color:var(--up); }} .down {{ color:var(--down); }} .flat, .na {{ color:var(--muted); }}
+  .consensus-row {{ display:flex; flex-wrap:wrap; align-items:baseline; gap:10px; padding:8px 0; border-bottom:1px solid var(--line); }}
+  .consensus-row:last-child {{ border-bottom:none; }}
+  .consensus-row .ticker {{ font-size:16px; min-width:64px; }}
+  .verdict {{ font-weight:700; }}
+  .chips {{ color:var(--muted); font-size:13px; }}
   .tablewrap {{ overflow-x:auto; background:var(--card); border:1px solid var(--line); border-radius:10px; }}
   table {{ border-collapse:collapse; width:100%; font-size:14px; min-width:640px; }}
   th, td {{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }}
@@ -216,10 +297,12 @@ def render(cfg, date, tickers, local_now):
 <body>
 <div class="wrap">
   <header>
-    <h1>{esc(acct['display'])} 追蹤日報 <span class="datebadge">{esc(date)} ET</span></h1>
-    <p class="stats">今日 {n_tickers_today} 檔標的 ・ {n_mentions_today} 次提及<br>
+    <h1>{esc(title)} <span class="datebadge">{esc(date)} ET</span></h1>
+    <p class="stats">追蹤：{esc("、".join(f"{a['display']}（@{a['handle']}）" for a in accounts))}<br>
+    今日 {n_tickers_today} 檔標的 ・ {n_mentions_today} 次提及<br>
     數據更新：美東 {esc(date)} ・ 本地時間：{esc(local_now)}</p>
   </header>
+{consensus_html}
 
   <section>
     <h2>市場標籤（看多／看空／中性）</h2>
@@ -260,8 +343,8 @@ def render(cfg, date, tickers, local_now):
   </section>
 
   <footer>
-    本報告由自動化工具彙整 {esc(acct['display'])}（@{esc(acct['handle'])}）公開貼文而成，與其本人無任何關聯，
-    亦不構成投資建議——僅為方便研究。內容可能有誤，請以原帖為準並自行核實（DYOR）。
+    本報告由自動化工具彙整 {esc("、".join(f"{a['display']}（@{a['handle']}）" for a in accounts))} 公開貼文而成，
+    與其本人無任何關聯，亦不構成投資建議——僅為方便研究。內容可能有誤，請以原帖為準並自行核實（DYOR）。
   </footer>
 </div>
 <script>
@@ -303,11 +386,14 @@ def main():
         raise SystemExit("資料庫沒有貼文，請先執行 scripts/fetch.py")
 
     tickers = gather(con, cfg, date)
+    consensus = gather_consensus(con, date)
     local_now = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M %Z")
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
-    out = out_dir / f"{cfg['account']['handle']}-tracker-{date}-zh.html"
-    out.write_text(render(cfg, date, tickers, local_now), encoding="utf-8")
+    accounts = get_accounts(cfg)
+    slug = accounts[0]["handle"] if len(accounts) == 1 else "multi"
+    out = out_dir / f"{slug}-tracker-{date}-zh.html"
+    out.write_text(render(cfg, date, tickers, consensus, local_now), encoding="utf-8")
     print(out)
 
 

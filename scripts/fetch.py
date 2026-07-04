@@ -4,7 +4,9 @@ Two sources:
   1. X API v2 (needs env TWITTER_BEARER_TOKEN):   python3 scripts/fetch.py --x-api
   2. JSON file import (offline / manual export):  python3 scripts/fetch.py --import data/sample_posts.json
 
-JSON format: a list of {"id": str, "ts": ISO8601 str, "text": str, "url": str(optional)}
+JSON format: a list of {"id": str, "ts": ISO8601 str, "text": str,
+                        "url": str(optional), "account": handle(optional)}
+Imported posts without "account" belong to the first configured account.
 Dates are bucketed to the account timezone (config.timezone, default US/Eastern).
 """
 import argparse
@@ -16,7 +18,7 @@ import urllib.request
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
-from db import connect, load_config
+from db import connect, get_accounts, load_config
 
 X_API = "https://api.twitter.com/2"
 
@@ -28,12 +30,15 @@ def to_local_date(ts_iso, tz):
     return dt.astimezone(tz).strftime("%Y-%m-%d")
 
 
-def upsert_posts(con, posts, tz):
+def upsert_posts(con, posts, tz, default_account):
     n = 0
     for p in posts:
         cur = con.execute(
-            "INSERT OR IGNORE INTO posts(id, date, ts, text, url) VALUES(?,?,?,?,?)",
-            (str(p["id"]), to_local_date(p["ts"], tz), p["ts"], p["text"], p.get("url", "")),
+            "INSERT OR IGNORE INTO posts(id, date, ts, text, url, account) VALUES(?,?,?,?,?,?)",
+            (
+                str(p["id"]), to_local_date(p["ts"], tz), p["ts"], p["text"],
+                p.get("url", ""), p.get("account", default_account),
+            ),
         )
         n += cur.rowcount
     con.commit()
@@ -47,13 +52,9 @@ def x_api_get(path, params, token):
         return json.loads(resp.read().decode("utf-8"))
 
 
-def fetch_from_x(con, cfg, tz):
-    token = os.environ.get("TWITTER_BEARER_TOKEN")
-    if not token:
-        sys.exit("TWITTER_BEARER_TOKEN 未設定；改用 --import 匯入 JSON，或設定 X API 金鑰")
-    handle = cfg["account"]["handle"]
+def fetch_account(con, handle, tz, token):
     user = x_api_get(f"/users/by/username/{handle}", {}, token)["data"]
-    latest = con.execute("SELECT MAX(id) AS m FROM posts").fetchone()["m"]
+    latest = con.execute("SELECT MAX(id) AS m FROM posts WHERE account=?", (handle,)).fetchone()["m"]
 
     params = {
         "max_results": 100,
@@ -74,13 +75,26 @@ def fetch_from_x(con, cfg, tz):
                 "ts": t["created_at"],
                 "text": t["text"],
                 "url": f"https://x.com/{handle}/status/{t['id']}",
+                "account": handle,
             }
             for t in data.get("data", [])
         ]
-        total += upsert_posts(con, posts, tz)
+        total += upsert_posts(con, posts, tz, handle)
         page = data.get("meta", {}).get("next_token")
         if not page:
             break
+    return total
+
+
+def fetch_from_x(con, cfg, tz):
+    token = os.environ.get("TWITTER_BEARER_TOKEN")
+    if not token:
+        sys.exit("TWITTER_BEARER_TOKEN 未設定；改用 --import 匯入 JSON，或設定 X API 金鑰")
+    total = 0
+    for acct in get_accounts(cfg):
+        n = fetch_account(con, acct["handle"], tz, token)
+        print(f"  @{acct['handle']}: 新增 {n} 則")
+        total += n
     return total
 
 
@@ -97,7 +111,7 @@ def main():
 
     if args.import_file:
         posts = json.loads(open(args.import_file, encoding="utf-8").read())
-        n = upsert_posts(con, posts, tz)
+        n = upsert_posts(con, posts, tz, get_accounts(cfg)[0]["handle"])
     else:
         n = fetch_from_x(con, cfg, tz)
     print(f"新增 {n} 則貼文（資料庫共 {con.execute('SELECT COUNT(*) c FROM posts').fetchone()['c']} 則）")

@@ -1,12 +1,13 @@
 ---
 name: serenity-watch
-description: 追蹤 X 股票分析帳號（預設 Serenity @aleabitoreddit）的個股提及，產生繁體中文每日 HTML 日報與個股觀點深度分析。當使用者要求「今天的日報」「更新追蹤」「怎麼看某一檔股票」時使用。
+description: 追蹤一位或多位 X 股票分析帳號（預設 Serenity @aleabitoreddit）的個股提及，產生繁體中文每日 HTML 日報（含多博主共識比對）與個股觀點深度分析。當使用者要求「今天的日報」「更新追蹤」「怎麼看某一檔股票」「加追蹤某帳號」時使用。
 ---
 
 # Serenity Watch — X 股票大神追蹤器
 
-追蹤一位 X 上的股票分析帳號，把他提過的每一檔標的建檔：提及次數、看多／看空表態、
-首次提及日期與價格、最新價格與漲幅，並產出繁體中文 HTML 日報。
+追蹤一位或多位 X 上的股票分析帳號，把他們提過的每一檔標的建檔：提及次數、
+看多／看空表態、首次提及日期與價格、最新價格與漲幅，並產出繁體中文 HTML 日報；
+追蹤多帳號時自動加入「博主共識」區塊（近7日 ≥2 位博主提及的標的，逐檔比對淨表態）。
 
 所有指令都在本 skill 目錄下執行（`cd` 到本目錄或用絕對路徑）。資料存在 `data/tracker.db`（SQLite）。
 
@@ -48,9 +49,11 @@ python3 scripts/prices.py --import <價格.json>   # 離線價格，格式見 da
 
 ## 設定
 
-`config.json`：追蹤帳號、時區、行業對照（`industries`）、非美股價格代號
-（`price_symbols`，如 SIVE → sive.se）、幣別（`currencies`）、誤判黑名單
-（`ticker_blocklist`）。要追蹤別的帳號，改 `account.handle` 後重新 fetch 即可。
+`config.json`：追蹤帳號清單（`accounts` 陣列）、時區、行業對照（`industries`）、
+非美股價格代號（`price_symbols`，如 SIVE → sive.se）、幣別（`currencies`）、
+誤判黑名單（`ticker_blocklist`）。使用者說「加追蹤某帳號」時，在 `accounts`
+陣列加一個 `{"handle", "display", "description"}` 物件後重新 fetch 即可；
+資料庫按帳號分開記錄，`query.py` 輸出會標明每則貼文出自哪位博主。
 
 ## 原則
 

@@ -1,9 +1,16 @@
 {
-  "account": {
-    "handle": "aleabitoreddit",
-    "display": "Serenity",
-    "description": "AI／半導體供應鏈分析師"
-  },
+  "accounts": [
+    {
+      "handle": "aleabitoreddit",
+      "display": "Serenity",
+      "description": "AI／半導體供應鏈分析師"
+    },
+    {
+      "handle": "ordinarydadai",
+      "display": "OrdinaryDad",
+      "description": "科技股論點型投資人（示範用第二帳號）"
+    }
+  ],
   "timezone": "America/New_York",
   "report": {
     "language": "zh-Hant",
